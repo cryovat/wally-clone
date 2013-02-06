@@ -8,10 +8,11 @@
     var viewport = {
 
         active: [],
+        tile: main.getService("tile"),
         cursor: main.getService("cursor"),
 
         onSignal: function (type, data) {
-            if (type.substring(0, 6) === "cursor") {
+            if (type.substring(0, 6) === "cursor" || type.substring(0, 4) === "tile") {
                 _.each(viewport.active, function (v) {
                     v.invalidate();
                 });
@@ -20,10 +21,14 @@
 
         addViewPort: function (id) {
 
-            var pixelSize = 1, cursor = viewport.cursor, canvas, ctx, invalidate, getZoom, setZoom, getPixelSize, obj;
+            var pixelSize = 1, cursor = viewport.cursor, tile = viewport.tile,
+                canvas, ctx, invalidate, getZoom, setZoom, getPixelSize, obj;
 
             canvas = document.getElementById(id);
             ctx = canvas.getContext("2d");
+            ctx.imageSmoothingEnabled = false;
+            ctx.mozImageSmoothingEnabled = false;
+            ctx.webkitImageSmoothingEnabled = false;
 
             if (!_.isElement(canvas)) {
                 throw new Error("Canvas with id '" + id + "'not found");
@@ -34,6 +39,8 @@
 
                 ctx.fillStyle = "rgb(0,100,0)";
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                tile.drawImage(ctx, 0, 0, tile.getWidth() * pixelSize, tile.getHeight() * pixelSize);
 
                 ctx.fillStyle = "rgb(255,255,255)";
                 ctx.fillText("X: " + pos.x + ", Y: " + pos.y, 10, 10);
@@ -59,7 +66,6 @@
                     x = Math.floor((e.clientX - rect.left) / pixelSize),
                     y = Math.floor((e.clientY - rect.top) / pixelSize);
 
-                console.log(["size: " + pixelSize, "zoom: " + getZoom(), x, y]);
                 cursor.move(x, y);
             });
 
