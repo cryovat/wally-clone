@@ -18,12 +18,11 @@
             ctx.drawImage(tile.baseImage, sx, sy, swidth, sheight, x, y, width, height);
         },
 
-        getWidth: function () {
-            return tile.baseImage.width;
-        },
-
-        getHeight: function () {
-            return tile.baseImage.height;
+        getTileInfo: function () {
+            return {
+                width: tile.baseImage.width,
+                height: tile.baseImage.height
+            };
         },
 
         loadFromUrl: function (url) {
@@ -38,7 +37,7 @@
     };
 
     tile.baseImage.addEventListener("load", function () {
-        main.broadcast("tile.loaded", {});
+        main.broadcast("tile.loaded", tile.getTileInfo());
     });
 
     main.addService("tile", {
@@ -46,8 +45,7 @@
         drawImage: tile.drawImage,
         drawImageClipped: tile.drawImageClipped,
 
-        getWidth: tile.getWidth,
-        getHeight: tile.getHeight,
+        getTileInfo: tile.getTileInfo,
 
         loadFromUrl: tile.loadFromUrl
 
