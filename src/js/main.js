@@ -1,7 +1,7 @@
 (function (_) {
     "use strict";
 
-    if (typeof(_) !== "function") {
+    if (typeof (_) !== "function") {
         throw new Error("Underscore.js not found");
     }
 
