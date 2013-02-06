@@ -7,9 +7,31 @@
     </script>
     </head>
 <body>
-    <canvas id="mainCanvas">
+    <canvas id="mainCanvas" width="256" height="256" tabindex="1">
         Your browser doesn't seem to support the HTML5 canvas element. :'(
     </canvas>
+
+    <canvas id="c2" width="256" height="256" tabindex="2">
+        Get Chrome...
+    </canvas>
+
+    <canvas id="c3" width="256" height="256" tabindex="3">
+        Or Firefox...
+    </canvas>
+
+    <canvas id="c4" width="256" height="256" tabindex="4">
+        Or Konqueror...
+    </canvas>
+
     <script src="js/main.js" type="text/javascript"></script>
+    <script src="js/cursor.js" type="text/javascript"></script>
+    <script src="js/viewport.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        this.Warry.getService("viewport").addViewPort("mainCanvas");
+        this.Warry.getService("viewport").addViewPort("c2").setZoom(2);
+        this.Warry.getService("viewport").addViewPort("c3").setZoom(3);
+        this.Warry.getService("viewport").addViewPort("c4").setZoom(4);
+    </script>
 </body>
 </html>
