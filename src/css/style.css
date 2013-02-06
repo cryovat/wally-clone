@@ -1,0 +1,11 @@
+body {
+    background-image: url(../img/checkers.png);
+    margin: 0;
+    padding: 0;
+}
+
+#mainCanvas {
+    background-color: black;
+    width: 640px;
+    height: 480px;
+}
