@@ -64,6 +64,10 @@
 
         },
 
+        createModel: function () {
+            return new core.Model();
+        },
+
         addService: function (id, m) {
 
             if (!_.isString(id)) {
@@ -88,6 +92,7 @@
             }
 
             var service = new core.Model();
+
             constructor.call(service);
 
             core.addService(id, service);
@@ -176,6 +181,7 @@
 
     global.Warry = {
 
+        createModel: core.createModel,
         createService: core.createService,
         addService: core.addService,
         getService: core.getService,

@@ -11,6 +11,8 @@
             tile = {
 
                 baseImage: new Image(),
+                zoom: 1,
+                zoomLevels: [1, 2, 4, 8, 16],
 
                 drawImage: function (ctx, x, y, width, height) {
                     if (tile.baseImage.complete) {
@@ -20,6 +22,26 @@
 
                 drawImageClipped: function (ctx, sx, sy, swidth, sheight, x, y, width, height) {
                     ctx.drawImage(tile.baseImage, sx, sy, swidth, sheight, x, y, width, height);
+                },
+
+                getZoom: function () {
+                    return tile.zoom;
+                },
+
+                setZoom: function (zoom) {
+
+                    if (!_.isFinite(zoom)) {
+                        throw new TypeError("Expected zoom level to be finite number, got " + typeof (zoom));
+                    }
+
+                    if (zoom !== tile.zoom) {
+                        tile.zoom = zoom;
+                        that.fireEvent("zoomchanged", { zoom: zoom });
+                    }
+                },
+
+                getZoomLevels: function () {
+                    return tile.zoomLevels.slice(0);
                 },
 
                 getTileInfo: function () {
@@ -43,6 +65,11 @@
 
         that.drawImage = tile.drawImage;
         that.drawImageClipped = tile.drawImageClipped;
+
+        that.getZoom = tile.getZoom;
+        that.setZoom = tile.setZoom;
+        that.getZoomLevels = tile.getZoomLevels;
+
         that.getTileInfo = tile.getTileInfo;
         that.loadFromUrl = tile.loadFromUrl;
 
