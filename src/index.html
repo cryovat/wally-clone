@@ -7,33 +7,65 @@
     </script>
     </head>
 <body>
-    <canvas id="mainCanvas" width="256" height="256" tabindex="1">
+
+    <form>
+        <label><input type="radio" name="tool" value="pen" disabled />Pen</label>
+        <label><input type="radio" name="tool" value="line" disabled />Line</label>
+        <label><input type="radio" name="tool" value="rectangle" disabled />Rectangle</label>
+        <label><input type="radio" name="tool" value="fill" disabled />Fill</label>
+    </form>
+
+    <form>
+        <label>Zoom:
+            <select name="zoom" disabled>
+                <option value="100%">100%</option>
+                <option value="200%">200%</option>
+                <option value="200%">400%</option>
+                <option value="200%">800%</option>
+                <option value="200%">1600%</option>
+            </select>
+        </label>
+    </form>
+
+    <canvas id="mainCanvas" width="256" height="480" tabindex="1">
         Your browser doesn't seem to support the HTML5 canvas element. :'(
     </canvas>
 
-    <canvas id="c2" width="256" height="256" tabindex="2">
+    <canvas id="c2" width="256" height="480" tabindex="2">
         Get Chrome...
     </canvas>
 
-    <canvas id="c3" width="256" height="256" tabindex="3">
+    <canvas id="c3" width="256" height="480" tabindex="3">
         Or Firefox...
     </canvas>
 
-    <canvas id="c4" width="256" height="256" tabindex="4">
+    <canvas id="c4" width="256" height="480" tabindex="4">
         Or Konqueror...
+    </canvas>
+
+    <canvas id="pal" width="128" height="480" tabindex="5">
+        Or Opera...
     </canvas>
 
     <script src="js/main.js" type="text/javascript"></script>
     <script src="js/cursor.js" type="text/javascript"></script>
     <script src="js/tile.js" type="text/javascript"></script>
+    <script src="js/palette.js" type="text/javascript"></script>
     <script src="js/viewport.js" type="text/javascript"></script>
+    <script src="js/views/paletteview.js" type="text/javascript"></script>
 
     <script type="text/javascript">
-        this.Warry.getService("tile").loadFromUrl("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAFZJREFUOI3tkkEKwDAIBEfpx/xYDn4sT7OHUGx6iuk1C6KDIiysYB50wEgVWOkALRdF1unrWwWOUR45r7NgHjveZwsb3h/WP94BrtHa52qd5eTg5AC4AcZYajOyI2czAAAAAElFTkSuQmCC");
-        this.Warry.getService("viewport").addViewPort("mainCanvas");
-        this.Warry.getService("viewport").addViewPort("c2").setZoom(2);
-        this.Warry.getService("viewport").addViewPort("c3").setZoom(3);
-        this.Warry.getService("viewport").addViewPort("c4").setZoom(4);
+
+        var tile = Warry.getService("tile"),
+            viewport = Warry.getService("viewport"),
+            paletteview = Warry.getService("paletteview");
+
+        tile.loadFromUrl("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAFZJREFUOI3tkkEKwDAIBEfpx/xYDn4sT7OHUGx6iuk1C6KDIiysYB50wEgVWOkALRdF1unrWwWOUR45r7NgHjveZwsb3h/WP94BrtHa52qd5eTg5AC4AcZYajOyI2czAAAAAElFTkSuQmCC");
+        viewport.addViewPort("mainCanvas");
+        viewport.addViewPort("c2").setZoom(2);
+        viewport.addViewPort("c3").setZoom(3);
+        viewport.addViewPort("c4").setZoom(4);
+        paletteview.addPaletteView("pal");
     </script>
 </body>
 </html>

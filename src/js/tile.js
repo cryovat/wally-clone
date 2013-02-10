@@ -1,4 +1,4 @@
-(function (main, _) {
+(function (main) {
     "use strict";
 
     if (typeof (_) !== "function") {
@@ -51,4 +51,4 @@
 
     });
 
-}(this.Warry, this._));
+}(Warry));

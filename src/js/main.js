@@ -1,4 +1,4 @@
-(function (_) {
+(function (global) {
     "use strict";
 
     if (typeof (_) !== "function") {
@@ -63,13 +63,7 @@
 
     };
 
-    core.canvas = document.getElementById("mainCanvas");
-
-    if (core.canvas === null) {
-        throw new Error("Canvas with id 'mainCanvas' not found!");
-    }
-
-    window.Warry = {
+    global.Warry = {
 
         addService: core.addService,
         getService: core.getService,
@@ -78,4 +72,4 @@
 
     };
 
-}(this._));
+}(this));

@@ -138,4 +138,4 @@
         onSignal: viewport.onSignal
     });
 
-}(this.Warry, this._));
+}(Warry, _));

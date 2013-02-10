@@ -2,10 +2,44 @@ body {
     background-image: url(../img/checkers.png);
     margin: 0;
     padding: 64px;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+form {
+    margin: 8px;
+    padding: 4px;
+    border-left:  1px solid black;
+    border-top: 1px solid black;
+    border-right: 1px solid #444444;
+    border-bottom: 1px solid #444444;
+    background-color: black;
+    color: white;
+    float: left;
+}
+
+label {
+    display: block;
+    width: 128px;
+}
+
+select {
+    display: block;
+    width: 120px;
+    margin: 4px auto;
 }
 
 canvas {
+    clear: left;
     background-color: black;
-    float: left;
     margin: 8px;
+    border-left:  1px solid black;
+    border-top: 1px solid black;
+    border-right: 1px solid #444444;
+    border-bottom: 1px solid #444444;
+
 }

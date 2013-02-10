@@ -1,4 +1,4 @@
-(function (main, _) {
+(function (main) {
     "use strict";
 
     if (!_.isObject(main)) {
@@ -68,4 +68,4 @@
         cancel: cursor.cancel
     });
 
-}(this.Warry, this._));
+}(Warry));
