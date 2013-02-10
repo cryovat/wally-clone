@@ -88,7 +88,7 @@
             }
 
             var service = new core.Model();
-            constructor.call(service)
+            constructor.call(service);
 
             core.addService(id, service);
         },
