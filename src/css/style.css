@@ -11,6 +11,11 @@ body {
 }
 
 form {
+    width: 128px;
+    float: left;
+}
+
+fieldset {
     margin: 8px;
     padding: 4px;
     border-left:  1px solid black;
@@ -19,18 +24,21 @@ form {
     border-bottom: 1px solid #444444;
     background-color: black;
     color: white;
-    float: left;
+}
+
+button {
+    display: block;
+    width: 100%;
 }
 
 label {
     display: block;
-    width: 128px;
 }
 
 select {
     display: block;
-    width: 120px;
     margin: 4px auto;
+    width: 100%;
 }
 
 canvas {
