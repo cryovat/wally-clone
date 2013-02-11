@@ -15,7 +15,7 @@
                 zoomLevels: [1, 2, 4, 8, 16, 32],
 
                 drawImage: function (ctx, x, y, width, height) {
-                    if (tile.baseImage.complete) {
+                    if (tile.baseImage.complete && tile.baseImage.width > 0 && tile.baseImage.height > 0) {
                         ctx.drawImage(tile.baseImage, x, y, width, height);
                     }
                 },
@@ -58,10 +58,12 @@
                     }
 
                     tile.baseImage.src = url;
-
-                    that.fireEvent("imagechanged", { info: tile.getTileInfo() });
                 }
             };
+
+        tile.baseImage.addEventListener("load", function (e) {
+            that.fireEvent("imagechanged", { info: tile.getTileInfo() });
+        });
 
         that.drawImage = tile.drawImage;
         that.drawImageClipped = tile.drawImageClipped;

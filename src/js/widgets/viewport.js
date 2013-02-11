@@ -18,11 +18,7 @@
             tileHeight,
             bufImg,
             bufTool,
-            invalidate,
-            getZoom,
-            setZoom,
-            getPixelSize,
-            obj;
+            invalidate;
 
         ctx = canvas.getContext("2d");
         ctx.imageSmoothingEnabled = false;
@@ -48,6 +44,23 @@
 
             ctx.fillStyle = cursor.isDown() ? "rgb(255, 255, 51)" : "rgb(150, 150, 150)";
             ctx.fillRect(pos.x * pixelSize, pos.y * pixelSize, pixelSize, pixelSize);
+
+            if (pixelSize > 2) {
+                ctx.strokeStyle = "rgba(255, 255, 255, 90)";
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(0, tileHeight * pixelSize);
+                ctx.lineTo(tileWidth * 3 * pixelSize,  tileHeight * pixelSize);
+                ctx.moveTo(0, tileHeight * 2 * pixelSize);
+                ctx.lineTo(tileWidth * 3 * pixelSize,  tileHeight * 2 * pixelSize);
+                ctx.moveTo(tileWidth * pixelSize, 0);
+                ctx.lineTo(tileWidth * pixelSize,  tileHeight * 3 * pixelSize);
+                ctx.moveTo(tileHeight * 2 * pixelSize, 0);
+                ctx.lineTo(tileWidth * 2 * pixelSize,  tileHeight * 3 * pixelSize);
+                ctx.stroke();
+
+
+            }
         };
 
         resetBuffers = function (data) {
@@ -71,21 +84,13 @@
 
         };
 
-        getZoom = function () {
-            return Math.sqrt(pixelSize);
-        };
-
-        setZoom = function (val) {
-            pixelSize = Math.pow(2, Math.max(0, Math.min(15, val - 1)));
-        };
-
-        getPixelSize = function () {
-            return pixelSize;
-        };
-
         tile.addEventListener("zoomchanged", function (e) {
             pixelSize = e.zoom;
             invalidate();
+        });
+
+        tile.addEventListener("imagechanged", function (e) {
+            resetBuffers(e.info);
         });
 
         cursor.addEventListener("cursormove", function (e) {
@@ -129,7 +134,6 @@
         });
 
         resetBuffers(tile.getTileInfo());
-        return obj;
 
     });
 

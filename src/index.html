@@ -30,6 +30,12 @@
             </label>
         </fieldset>
 
+        <fieldset>
+            <label>Tilemode:
+                <input type="checkbox" disabled />
+            </label>
+        </fieldset>
+
     </form>
 
     <canvas id="mainCanvas" width="512" height="480" tabindex="1">
@@ -54,11 +60,12 @@
     <script type="text/javascript">
 
         var tile = Warry.getService("tile"),
-            x = tile.loadFromUrl("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAFZJREFUOI3tkkEKwDAIBEfpx/xYDn4sT7OHUGx6iuk1C6KDIiysYB50wEgVWOkALRdF1unrWwWOUR45r7NgHjveZwsb3h/WP94BrtHa52qd5eTg5AC4AcZYajOyI2czAAAAAElFTkSuQmCC"),
             viewport = Warry.createWidget("viewport", "mainCanvas"),
             zoompicker = Warry.createWidget("zoompicker", "zoom"),
             palette = Warry.createWidget("colorpicker", "pal"),
             toolbox = Warry.createWidget("toolbox", "toolbox");
+
+        tile.loadFromUrl("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAFZJREFUOI3tkkEKwDAIBEfpx/xYDn4sT7OHUGx6iuk1C6KDIiysYB50wEgVWOkALRdF1unrWwWOUR45r7NgHjveZwsb3h/WP94BrtHa52qd5eTg5AC4AcZYajOyI2czAAAAAElFTkSuQmCC");
 
     </script>
 </body>
