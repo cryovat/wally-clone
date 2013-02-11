@@ -11,6 +11,7 @@
             tile = main.getService("tile"),
             cursor = main.getService("cursor"),
             pixelSize = tile.getZoom(),
+            repeat = tile.isRepeat(),
             canvas = element,
             ctx,
             resetBuffers,
@@ -26,13 +27,13 @@
         ctx.webkitImageSmoothingEnabled = false;
 
         invalidate = function () {
-            var pos = cursor.getPosition(), tx, ty;
+            var pos = cursor.getPosition(), tx, ty, times = repeat ? 3 : 1;
 
             ctx.fillStyle = "rgb(0,100,0)";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            for (tx = 0; tx < 3; tx += 1) {
-                for (ty = 0; ty < 3; ty += 1) {
+            for (tx = 0; tx < times; tx += 1) {
+                for (ty = 0; ty < times; ty += 1) {
                     ctx.putImageData(bufImg, tx * tileWidth, ty * tileHeight);
                 }
             }
@@ -45,7 +46,7 @@
             ctx.fillStyle = cursor.isDown() ? "rgb(255, 255, 51)" : "rgb(150, 150, 150)";
             ctx.fillRect(pos.x * pixelSize, pos.y * pixelSize, pixelSize, pixelSize);
 
-            if (pixelSize > 2) {
+            if (repeat && pixelSize > 2) {
                 ctx.strokeStyle = "rgba(255, 255, 255, 90)";
                 ctx.lineWidth = 1;
                 ctx.beginPath();
@@ -58,8 +59,6 @@
                 ctx.moveTo(tileHeight * 2 * pixelSize, 0);
                 ctx.lineTo(tileWidth * 2 * pixelSize,  tileHeight * 3 * pixelSize);
                 ctx.stroke();
-
-
             }
         };
 
@@ -83,6 +82,13 @@
             invalidate();
 
         };
+
+        tile.addEventListener("repeatchanged", function (e) {
+            if (repeat !== e.repeat) {
+                repeat = e.repeat;
+                invalidate();
+            }
+        });
 
         tile.addEventListener("zoomchanged", function (e) {
             pixelSize = e.zoom;
