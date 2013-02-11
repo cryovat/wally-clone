@@ -13,6 +13,7 @@
                 baseImage: new Image(),
                 zoom: 8,
                 zoomLevels: [1, 2, 4, 8, 16, 32],
+                repeat: true,
 
                 drawImage: function (ctx, x, y, width, height) {
                     if (tile.baseImage.complete && tile.baseImage.width > 0 && tile.baseImage.height > 0) {
@@ -51,6 +52,24 @@
                     };
                 },
 
+                isRepeat: function () {
+                    return tile.repeat;
+                },
+
+                setRepeat: function (repeat) {
+
+                    if (!_.isBoolean(repeat)) {
+                        throw new TypeError("Expected repeat value to be boolean, got " + typeof (repeat));
+                    }
+
+                    if (tile.repeat !== repeat) {
+                        tile.repeat = repeat;
+
+                        that.fireEvent("repeatchanged", { repeat: repeat });
+                    }
+
+                },
+
                 loadFromUrl: function (url) {
 
                     if (!_.isString(url)) {
@@ -71,6 +90,9 @@
         that.getZoom = tile.getZoom;
         that.setZoom = tile.setZoom;
         that.getZoomLevels = tile.getZoomLevels;
+
+        that.isRepeat = tile.isRepeat;
+        that.setRepeat = tile.setRepeat;
 
         that.getTileInfo = tile.getTileInfo;
         that.loadFromUrl = tile.loadFromUrl;
