@@ -24,14 +24,6 @@
         </fieldset>
 
         <fieldset>
-            <label>Tool 2:
-                <select id="toolbox2" name="toolbox2">
-
-                </select>
-            </label>
-        </fieldset>
-
-        <fieldset>
             <label>Zoom:
                 <select id="zoom" name="zoom">
                 </select>
@@ -55,7 +47,7 @@
     <script src="js/palette.js" type="text/javascript"></script>
     <script src="js/tools/basic.js" type="text/javascript"></script>
     <script src="js/widgets/zoompicker.js" type="text/javascript"></script>
-    <script src="js/widgets/palette.js" type="text/javascript"></script>
+    <script src="js/widgets/colorpicker.js" type="text/javascript"></script>
     <script src="js/widgets/viewport.js" type="text/javascript"></script>
     <script src="js/widgets/toolbox.js" type="text/javascript"></script>
 
@@ -65,9 +57,8 @@
             x = tile.loadFromUrl("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAFZJREFUOI3tkkEKwDAIBEfpx/xYDn4sT7OHUGx6iuk1C6KDIiysYB50wEgVWOkALRdF1unrWwWOUR45r7NgHjveZwsb3h/WP94BrtHa52qd5eTg5AC4AcZYajOyI2czAAAAAElFTkSuQmCC"),
             viewport = Warry.createWidget("viewport", "mainCanvas"),
             zoompicker = Warry.createWidget("zoompicker", "zoom"),
-            palette = Warry.createWidget("palette", "pal"),
-            toolbox = Warry.createWidget("toolbox", "toolbox"),
-            toolbox2 = Warry.createWidget("toolbox", "toolbox2");
+            palette = Warry.createWidget("colorpicker", "pal"),
+            toolbox = Warry.createWidget("toolbox", "toolbox");
 
     </script>
 </body>

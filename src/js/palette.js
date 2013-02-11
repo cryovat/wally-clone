@@ -1,64 +1,109 @@
 (function (main) {
     "use strict";
 
-    if (typeof (_) !== "function") {
-        throw new Error("Underscore.js not found");
-    }
-
     if (!_.isObject(main)) {
-        throw new Error("Viewport module loaded before main Warry module");
+        throw new Error("Palette serivce loaded before main Warry module");
     }
 
-    var palette = {
+    main.createService("palette", function () {
 
-        entries: [
-            { r: 0, g: 0, b: 0, a: 0 },
-            { r: 255, g: 255, b: 255, a: 0}
-        ],
-        currentIndex: 0,
+        var that = this,
+            palette = {
 
-        getColorCount: function () {
+                // From http://androidarts.com/palette/16pal.htm
+                entries: [
+                    { r: 0,   g: 0,   b: 0,   a: 255 },
+                    { r: 157, g: 157, b: 157, a: 255 },
+                    { r: 255, g: 255, b: 255, a: 255 },
+                    { r: 190, g:  38, b:  51, a: 255 },
+                    { r: 224, g: 111, b: 139, a: 255 },
+                    { r:  73, g:  60, b:  43, a: 255 },
+                    { r: 164, g: 100, b:  34, a: 255 },
+                    { r: 235, g: 137, b:  49, a: 255 },
+                    { r: 247, g: 226, b: 107, a: 255 },
+                    { r:  47, g:  72, b:  78, a: 255 },
+                    { r:  68, g: 137, b:  26, a: 255 },
+                    { r: 163, g: 206, b:  39, a: 255 },
+                    { r:  27, g:  38, b:  50, a: 255 },
+                    { r:   0, g:  87, b: 132, a: 255 },
+                    { r:  49, g: 162, b: 242, a: 255 },
+                    { r: 178, g: 220, b: 239, a: 255 },
+                    { r: 255, g:   0, b: 255, a: 255 }
+                ],
+                currentIndex: 0,
 
-            return palette.entries.length;
+                getColorCount: function () {
 
-        },
+                    return palette.entries.length;
 
-        getColor: function (index) {
+                },
 
-            if (!_.isNumber(index)) {
-                throw new TypeError("Expected number for palette index, got " + typeof (index));
-            }
+                getColor: function (index) {
 
-            return palette.entries[index];
+                    if (!_.isFinite(index)) {
+                        throw new TypeError("Expected number for palette index, got " + typeof (index));
+                    }
 
-        },
+                    return palette.entries[index];
 
-        getSelectedColor: function (index) {
+                },
 
-            return palette.getColor(palette.selectedIndex);
+                eachColor: function (func) {
 
-        },
+                    if (!_.isFunction(func)) {
+                        throw new TypeError("Expected function for palette iterator, got " + typeof (func));
+                    }
 
-        setSelectedColor: function (index) {
+                    _.each(palette.entries, func);
+                },
 
-            if (!_.isNumber(index)) {
-                throw new TypeError("Expected number for palette index, got " + typeof (index));
-            }
+                isValidIndex: function (index) {
 
-            palette.currentIndex = index;
+                    if (!_.isFinite(index)) {
+                        throw new TypeError("Expected number for palette index, got " + typeof (index));
+                    }
 
-            main.broadcast("palette.colorSelected", palette.getColor(palette.currentIndex));
+                    if (palette.entries.length === 0) {
+                        return false;
+                    }
 
-        }
+                    return (0 <= index && index < palette.entries.length);
+                },
 
-    };
+                getSelectedIndex: function () {
+                    return palette.currentIndex;
+                },
 
-    main.addService("palette", {
+                setSelectedIndex: function (index) {
 
-        getColorCount: palette.getColorCount,
-        getColor: palette.getColor,
-        getSelectedColor: palette.getSelectedColor,
-        setSelectedColor: palette.setSelectedColor
+                    if (!_.isFinite(index)) {
+                        throw new TypeError("Expected number for palette index, got " + typeof (index));
+                    }
+
+                    palette.currentIndex = index;
+
+                    that.fireEvent("colorselected", { index: index });
+
+                },
+
+                withSelectedColor: function (func) {
+
+                    if (!_.isFunction(func)) {
+                        throw new TypeError("Expected function, got " + typeof (func));
+                    }
+
+                    func(palette.entries[palette.currentIndex]);
+                }
+
+            };
+
+        that.getColorCount = palette.getColorCount;
+        that.getColor = palette.getColor;
+        that.eachColor = palette.eachColor;
+        that.isValidIndex = palette.isValidIndex;
+        that.getSelectedIndex = palette.getSelectedIndex;
+        that.setSelectedIndex = palette.setSelectedIndex;
+        that.withSelectedColor = palette.withSelectedColor;
 
     });
 

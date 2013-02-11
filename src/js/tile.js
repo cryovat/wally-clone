@@ -12,7 +12,7 @@
 
                 baseImage: new Image(),
                 zoom: 8,
-                zoomLevels: [1, 2, 4, 8, 16],
+                zoomLevels: [1, 2, 4, 8, 16, 32],
 
                 drawImage: function (ctx, x, y, width, height) {
                     if (tile.baseImage.complete) {
