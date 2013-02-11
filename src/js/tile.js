@@ -11,7 +11,7 @@
             tile = {
 
                 baseImage: new Image(),
-                zoom: 1,
+                zoom: 8,
                 zoomLevels: [1, 2, 4, 8, 16],
 
                 drawImage: function (ctx, x, y, width, height) {

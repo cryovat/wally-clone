@@ -2,70 +2,74 @@
     "use strict";
 
     if (!_.isObject(main)) {
-        throw new Error("Cursor module loaded before main Warry module");
+        throw new Error("Cursor service loaded before main Warry module");
     }
 
-    var cursor = {
+    main.createService("cursor", function () {
 
-        data: {
-            x: 0,
-            y: 0,
-            isDown: false
-        },
+        var that = this,
+            cursor = {
 
-        getPosition: function () {
-            return { x: cursor.data.x, y: cursor.data.y };
-        },
+                data: {
+                    x: 0,
+                    y: 0,
+                    isDown: false
+                },
 
-        move: function (x, y) {
+                getPosition: function () {
+                    return { x: cursor.data.x, y: cursor.data.y };
+                },
 
-            if (!_.isNumber(x)) {
-                throw new TypeError("Expected number for 'x' value, but got " + typeof (x));
-            }
+                move: function (x, y) {
 
-            if (!_.isNumber(y)) {
-                throw new TypeError("Expected number for 'y' value, but got " + typeof (y));
-            }
+                    if (!_.isNumber(x)) {
+                        throw new TypeError("Expected number for 'x' value, but got " + typeof (x));
+                    }
 
-            cursor.data.x = x;
-            cursor.data.y = y;
+                    if (!_.isNumber(y)) {
+                        throw new TypeError("Expected number for 'y' value, but got " + typeof (y));
+                    }
 
-            main.broadcast("cursor.move", {x: cursor.data.x, y: cursor.data.y });
-        },
+                    cursor.data.x = x;
+                    cursor.data.y = y;
 
-        isDown: function () {
-            return cursor.data.isDown;
-        },
+                    that.fireEvent("cursormove", {x: cursor.data.x, y: cursor.data.y });
+                },
 
-        down: function () {
-            if (!cursor.data.isDown) {
-                cursor.data.isDown = true;
-                main.broadcast("cursor.down", {});
-            }
-        },
+                isDown: function () {
+                    return cursor.data.isDown;
+                },
 
-        up: function () {
-            if (cursor.data.isDown) {
-                cursor.data.isDown = false;
-                main.broadcast("cursor.up", {});
-            }
-        },
+                down: function () {
+                    if (!cursor.data.isDown) {
+                        cursor.data.isDown = true;
+                        that.fireEvent("cursordown", {});
+                    }
+                },
 
-        cancel: function () {
-            if (cursor.data.isDown) {
-                cursor.data.isDown = false;
-                main.broadcast("cursor.cancel", {});
-            }
-        }
-    };
+                up: function () {
+                    if (cursor.data.isDown) {
+                        cursor.data.isDown = false;
+                        that.fireEvent("cursorup", {});
+                    }
+                },
 
-    main.addService("cursor", {
-        getPosition: cursor.getPosition,
-        isDown: cursor.isDown,
-        move: cursor.move,
-        down: cursor.down,
-        up: cursor.up,
-        cancel: cursor.cancel
+                cancel: function () {
+                    if (cursor.data.isDown) {
+                        cursor.data.isDown = false;
+                        that.fireEvent("cursorcancel", {});
+                    }
+                }
+
+            };
+
+        that.getPosition = cursor.getPosition;
+        that.move = cursor.move;
+        that.isDown = cursor.isDown;
+        that.down = cursor.down;
+        that.up = cursor.up;
+        that.cancel = cursor.cancel;
+
     });
 
 }(Warry));
