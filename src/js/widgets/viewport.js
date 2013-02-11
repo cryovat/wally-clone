@@ -44,7 +44,10 @@
             ctx.fillText("X: " + pos.x + ", Y: " + pos.y, 10, 10);
 
             ctx.fillStyle = cursor.isDown() ? "rgb(255, 255, 51)" : "rgb(150, 150, 150)";
-            ctx.fillRect(pos.x * pixelSize, pos.y * pixelSize, pixelSize, pixelSize);
+            ctx.fillRect(Math.min((times * tileWidth - 1) * pixelSize, pos.x * pixelSize),
+                         Math.min((times * tileHeight - 1) * pixelSize, pos.y * pixelSize),
+                         pixelSize,
+                         pixelSize);
 
             if (repeat && pixelSize > 2) {
                 ctx.strokeStyle = "rgba(255, 255, 255, 90)";
