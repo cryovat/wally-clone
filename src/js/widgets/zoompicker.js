@@ -8,15 +8,17 @@
 
     main.addWidgetType("zoompicker", function (element) {
 
-        var tile = main.getService("tile"), changing = false;
+        var tile = main.getService("tile"),
+            changing = false;
 
         _.each(tile.getZoomLevels(), function (level) {
-
             var option = document.createElement("option");
             option.value = level;
             option.label = (level * 100) + "%";
             element.options.add(option);
         });
+
+        element.value = tile.getZoom();
 
         element.addEventListener("change", function (e) {
 
