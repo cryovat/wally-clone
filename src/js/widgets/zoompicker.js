@@ -14,7 +14,7 @@
         _.each(tile.getZoomLevels(), function (level) {
             var option = document.createElement("option");
             option.value = level;
-            option.label = (level * 100) + "%";
+            option.text = (level * 100) + "%";
             element.options.add(option);
         });
 

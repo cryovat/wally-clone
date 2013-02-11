@@ -13,7 +13,7 @@
 
             var option = document.createElement("option");
             option.value = name;
-            option.label = name;
+            option.text = name;
             element.options.add(option);
 
         });
