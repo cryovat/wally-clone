@@ -153,8 +153,6 @@
 
             this.applyAction = function (source, dest) {
 
-                console.log(that);
-
                 var x0, y0, x1, y1, sx, sy, x, y;
 
                 x0 = that._start.x;
@@ -166,8 +164,6 @@
                 sy = y0 < y1 ? 1 : -1;
 
                 x = x0;
-
-                console.log([x0, y0, x1, y1, dest.width, dest.height]);
 
                 do {
                     y = y0;
