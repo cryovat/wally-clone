@@ -74,6 +74,10 @@
                     return palette.currentIndex;
                 },
 
+                getSelectedColor: function () {
+                    return palette.getColor(palette.currentIndex);
+                },
+
                 setSelectedIndex: function (index) {
 
                     if (!_.isFinite(index)) {
@@ -103,6 +107,7 @@
         that.isValidIndex = palette.isValidIndex;
         that.getSelectedIndex = palette.getSelectedIndex;
         that.setSelectedIndex = palette.setSelectedIndex;
+        that.getSelectedColor = palette.getSelectedColor;
         that.withSelectedColor = palette.withSelectedColor;
 
     });

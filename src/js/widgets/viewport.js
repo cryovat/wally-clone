@@ -123,18 +123,13 @@
             resetBuffers(e.info);
         });
 
-        tools.addEventListener("validchanged", function (e) {
+        tools.addEventListener("paintpreview", function (e) {
 
-            var tool = tools.getCurrent();
+            bufTool.data.set(bufImg.data, 0);
 
-            if (!tool.isPreviewValid()) {
-                bufTool.data.set(bufImg.data, 0);
-
-                tool.paintPreview(bufImg,  bufTool);
-            }
+            e.painter(bufImg, bufTool);
 
             invalidate();
-
         });
 
         cursor.addEventListener("cursormove", function (e) {

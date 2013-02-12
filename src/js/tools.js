@@ -13,108 +13,107 @@
 
                 Tool: function (name) {
 
-                    var toolobj = this;
+                    this.init = function () {
+                        this._active = false;
+                    };
 
-                    toolobj.getName = function () {
+                    this._setActive = function (value) {
+
+                        if (value !== this._active) {
+                            this._active = value;
+                            this.fireEvent("activechanged", { active: this._active });
+                        }
+                    };
+
+                    this.paintPreviews = function () {
+                        this.fireEvent("paintpreview", { painter: this._painter });
+                    };
+
+                    this.setPreviewPainter = function (p) {
+                        this._painter = p;
+                    };
+
+                    this.getName = function () {
                         return name || "Unnamed tool";
                     };
 
-                    toolobj.isActive = function () {
-                        return false;
+                    this.isActive = function () {
+                        return this._active;
                     };
 
-                    toolobj.isPreviewValid = function () {
-                        return true;
-                    };
-
-                    toolobj.reset = function () {
+                    this.reset = function () {
 
                     };
 
-                    toolobj.abort = function () {
+                    this.abort = function () {
 
                     };
 
-                    toolobj.commit = function () {
+                    this.commit = function () {
                         throw new Error("commit must be overridden in tool");
                     };
 
-                    toolobj.down = function () {
+                    this.down = function () {
 
                     };
 
-                    toolobj.up = function () {
+                    this.up = function () {
 
                     };
 
-                    toolobj.move = function (x, y) {
+                    this.move = function (x, y) {
 
                     };
 
-                    toolobj.paintPreview = function (base, dest) {
-
+                    this.getPreviewPainter = function () {
+                        throw new Error("getPreviewPainter function must be overridden");
                     };
 
                 },
 
                 SimpleTool: function (name) {
 
-                    var toolobj = this,
-                        active = false,
-                        valid = true;
+                    if (this.init) {
+                        this.init();
+                    }
 
-                    toolobj._setActive = function (value) {
-                        if (value !== active) {
-                            active = value;
-                            toolobj.fireEvent("activechanged", { active: active });
-                        }
-                    };
-
-                    toolobj._setValid = function (value) {
-                        if (value !== valid) {
-                            valid = value;
-                            toolobj.fireEvent("validchanged", { valid: valid });
-                        }
-                    };
-
-                    toolobj.getName = function () {
+                    this.getName = function () {
                         return name || "Unnamed simple tool";
                     };
 
-                    toolobj.isActive = function () {
-                        return active;
+                    this.abort = function () {
+                        this.reset();
+                        this._setActive(false);
+                        this.paintPreviews();
                     };
 
-                    toolobj.isPreviewValid = function () {
-                        return valid;
-                    };
-
-                    toolobj.abort = function () {
-                        toolobj.reset();
-                        toolobj._setActive(false);
-                        toolobj._setValid(false);
-                    };
-
-                    toolobj.down = function () {
-
-                        toolobj.reset();
-                        toolobj._setActive(true);
-                        toolobj._setValid(false);
+                    this.onDown = function () {
 
                     };
 
-                    toolobj.up = function () {
-                        toolobj.commit();
-                        toolobj.reset();
+                    this.down = function () {
 
-                        toolobj._setActive(false);
-                        toolobj._setValid(false);
+                        this.reset();
+                        this._setActive(true);
+
+                        this.onDown();
+
+                        this.paintPreviews();
                     };
 
-                    toolobj.move = function (x, y) {
+                    this.onUp = function () {
 
-                        toolobj._setValid(false);
+                    };
 
+                    this.up = function () {
+
+                        this._setActive(false);
+                        this.commit();
+                        this.reset();
+
+                        this.onUp();
+
+                        this.paintPreviews();
                     };
 
                 },
@@ -126,8 +125,8 @@
                     that.fireEvent("activechanged", e);
                 },
 
-                currentInvalidated: function (e) {
-                    that.fireEvent("validchanged", e);
+                paintPreview: function (e) {
+                    that.fireEvent("paintpreview", e);
                 },
 
                 addTool: function (name, tool) {
@@ -147,7 +146,6 @@
                     if (!toolbox.current) {
                         toolbox.setCurrent(name);
                     }
-
                 },
 
                 createToolInternal: function (name, constructor, maker) {
@@ -176,6 +174,45 @@
                     toolbox.createToolInternal(name, constructor, function () { return new toolbox.SimpleTool(); });
                 },
 
+                createDragActionTool: function (name, factory, colorSource) {
+
+                    toolbox.createSimpleTool(name, function () {
+
+                        var dragAct,
+                            lastX = 0,
+                            lastY = 0;
+
+                        this.onDown = function () {
+                            dragAct.setStart(lastX, lastY);
+                        };
+
+                        this.reset = function () {
+                            dragAct = factory();
+                            dragAct.setColor(colorSource());
+                            dragAct.setStart(lastX, lastY);
+                            dragAct.setCurrent(lastX, lastY);
+                            this.setPreviewPainter(dragAct.applyAction);
+                        };
+
+                        this.move = function (x, y) {
+
+                            if (this.isActive()) {
+                                this.paintPreviews();
+                            }
+
+                            dragAct.setCurrent(x, y);
+                            lastX = x;
+                            lastY = y;
+                        };
+
+                        this.commit = function () {
+
+                        };
+
+                    });
+
+                },
+
                 getTools: function () {
                     return _.keys(toolbox.available);
                 },
@@ -191,12 +228,13 @@
                     if (tool) {
                         if (toolbox.current) {
                             toolbox.current.removeEventListener("activechanged", toolbox.currentToggled);
-                            toolbox.current.removeEventListener("validchanged", toolbox.currentInvalidated);
+                            toolbox.current.removeEventListener("paintpreview", toolbox.paintPreview);
                         }
 
                         toolbox.current = tool;
                         toolbox.current.addEventListener("activechanged", toolbox.currentToggled);
-                        toolbox.current.addEventListener("validchanged", toolbox.currentInvalidated);
+                        toolbox.current.addEventListener("paintpreview", toolbox.paintPreview);
+                        toolbox.current.reset();
 
                         that.fireEvent("toolchanged", { name: name });
                     }
@@ -239,6 +277,7 @@
         that.addTool = toolbox.addTool;
         that.createTool = toolbox.createTool;
         that.createSimpleTool = toolbox.createSimpleTool;
+        that.createDragActionTool = toolbox.createDragActionTool;
         that.getTools = toolbox.getTools;
         that.getCurrent = toolbox.getCurrent;
         that.setCurrent = toolbox.setCurrent;
