@@ -10,8 +10,10 @@
         var that = this,
             tile = main.getService("tile"),
             cursor = main.getService("cursor"),
+            tools = main.getService("tools"),
             pixelSize = tile.getZoom(),
             repeat = tile.isRepeat(),
+            times = repeat ? 3 : 1,
             canvas = element,
             ctx,
             resetBuffers,
@@ -19,6 +21,8 @@
             tileHeight,
             bufImg,
             bufTool,
+            calcX,
+            calcY,
             invalidate;
 
         ctx = canvas.getContext("2d");
@@ -26,28 +30,30 @@
         ctx.mozImageSmoothingEnabled = false;
         ctx.webkitImageSmoothingEnabled = false;
 
+        calcX = function (x) {
+            return Math.min((times * tileWidth - 1) * pixelSize, x * pixelSize);
+        };
+
+        calcY = function (y) {
+            return Math.min((times * tileHeight - 1) * pixelSize, y * pixelSize);
+        };
+
         invalidate = function () {
-            var pos = cursor.getPosition(), tx, ty, times = repeat ? 3 : 1;
+            var pos = cursor.getPosition(), tx, ty, tool = tools.getCurrent();
 
             ctx.fillStyle = "rgb(0,100,0)";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
             for (tx = 0; tx < times; tx += 1) {
                 for (ty = 0; ty < times; ty += 1) {
-                    ctx.putImageData(bufImg, tx * tileWidth, ty * tileHeight);
+                    ctx.putImageData(tool && tool.isActive() ? bufTool : bufImg, tx * tileWidth, ty * tileHeight);
                 }
             }
 
             ctx.drawImage(ctx.canvas, 0, 0, canvas.width * pixelSize, canvas.height * pixelSize);
 
-            ctx.fillStyle = "rgb(255,255,255)";
-            ctx.fillText("X: " + pos.x + ", Y: " + pos.y, 10, 10);
-
             ctx.fillStyle = cursor.isDown() ? "rgb(255, 255, 51)" : "rgb(150, 150, 150)";
-            ctx.fillRect(Math.min((times * tileWidth - 1) * pixelSize, pos.x * pixelSize),
-                         Math.min((times * tileHeight - 1) * pixelSize, pos.y * pixelSize),
-                         pixelSize,
-                         pixelSize);
+            ctx.fillRect(calcX(pos.x), calcY(pos.y), pixelSize, pixelSize);
 
             if (repeat && pixelSize > 2) {
                 ctx.strokeStyle = "rgba(255, 255, 255, 90)";
@@ -89,6 +95,7 @@
         tile.addEventListener("repeatchanged", function (e) {
             if (repeat !== e.repeat) {
                 repeat = e.repeat;
+                times = repeat ? 3 : 1;
                 invalidate();
             }
         });
@@ -100,6 +107,20 @@
 
         tile.addEventListener("imagechanged", function (e) {
             resetBuffers(e.info);
+        });
+
+        tools.addEventListener("validchanged", function (e) {
+
+            var tool = tools.getCurrent();
+
+            if (!tool.isPreviewValid()) {
+                bufTool.data.set(bufImg.data, 0);
+
+                tool.paintPreview(bufImg,  bufTool);
+            }
+
+            invalidate();
+
         });
 
         cursor.addEventListener("cursormove", function (e) {
