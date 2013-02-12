@@ -23,6 +23,7 @@
             bufTool,
             calcX,
             calcY,
+            invPending = false,
             invalidate;
 
         ctx = canvas.getContext("2d");
@@ -39,36 +40,49 @@
         };
 
         invalidate = function () {
-            var pos = cursor.getPosition(), tx, ty, tool = tools.getCurrent();
 
-            ctx.fillStyle = "rgb(0,100,0)";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            if (!invPending) {
 
-            for (tx = 0; tx < times; tx += 1) {
-                for (ty = 0; ty < times; ty += 1) {
-                    ctx.putImageData(tool && tool.isActive() ? bufTool : bufImg, tx * tileWidth, ty * tileHeight);
-                }
+                invPending = true;
+
+                _.defer(function () {
+
+                    var pos = cursor.getPosition(), tx, ty, tool = tools.getCurrent();
+
+                    ctx.fillStyle = "rgb(0,100,0)";
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                    for (tx = 0; tx < times; tx += 1) {
+                        for (ty = 0; ty < times; ty += 1) {
+                            ctx.putImageData(tool && tool.isActive() ? bufTool : bufImg, tx * tileWidth, ty * tileHeight);
+                        }
+                    }
+
+                    ctx.drawImage(ctx.canvas, 0, 0, canvas.width * pixelSize, canvas.height * pixelSize);
+
+                    ctx.fillStyle = cursor.isDown() ? "rgb(255, 255, 51)" : "rgb(150, 150, 150)";
+                    ctx.fillRect(calcX(pos.x), calcY(pos.y), pixelSize, pixelSize);
+
+                    if (repeat && pixelSize > 2) {
+                        ctx.strokeStyle = "rgba(255, 255, 255, 90)";
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(0, tileHeight * pixelSize);
+                        ctx.lineTo(tileWidth * 3 * pixelSize,  tileHeight * pixelSize);
+                        ctx.moveTo(0, tileHeight * 2 * pixelSize);
+                        ctx.lineTo(tileWidth * 3 * pixelSize,  tileHeight * 2 * pixelSize);
+                        ctx.moveTo(tileWidth * pixelSize, 0);
+                        ctx.lineTo(tileWidth * pixelSize,  tileHeight * 3 * pixelSize);
+                        ctx.moveTo(tileHeight * 2 * pixelSize, 0);
+                        ctx.lineTo(tileWidth * 2 * pixelSize,  tileHeight * 3 * pixelSize);
+                        ctx.stroke();
+                    }
+
+                    invPending = false;
+
+                });
             }
 
-            ctx.drawImage(ctx.canvas, 0, 0, canvas.width * pixelSize, canvas.height * pixelSize);
-
-            ctx.fillStyle = cursor.isDown() ? "rgb(255, 255, 51)" : "rgb(150, 150, 150)";
-            ctx.fillRect(calcX(pos.x), calcY(pos.y), pixelSize, pixelSize);
-
-            if (repeat && pixelSize > 2) {
-                ctx.strokeStyle = "rgba(255, 255, 255, 90)";
-                ctx.lineWidth = 1;
-                ctx.beginPath();
-                ctx.moveTo(0, tileHeight * pixelSize);
-                ctx.lineTo(tileWidth * 3 * pixelSize,  tileHeight * pixelSize);
-                ctx.moveTo(0, tileHeight * 2 * pixelSize);
-                ctx.lineTo(tileWidth * 3 * pixelSize,  tileHeight * 2 * pixelSize);
-                ctx.moveTo(tileWidth * pixelSize, 0);
-                ctx.lineTo(tileWidth * pixelSize,  tileHeight * 3 * pixelSize);
-                ctx.moveTo(tileHeight * 2 * pixelSize, 0);
-                ctx.lineTo(tileWidth * 2 * pixelSize,  tileHeight * 3 * pixelSize);
-                ctx.stroke();
-            }
         };
 
         resetBuffers = function (data) {

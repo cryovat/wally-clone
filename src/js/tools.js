@@ -227,6 +227,12 @@
             }
         });
 
+        cursor.addEventListener("cursorcancel", function (e) {
+            if (toolbox.current) {
+                toolbox.current.abort();
+            }
+        });
+
         toolbox.Tool.prototype = main.createModel();
         toolbox.SimpleTool.prototype = new toolbox.Tool();
 
