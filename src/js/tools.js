@@ -12,6 +12,18 @@
             history = main.getService("history"),
             toolbox = {
 
+                Mode: function (name, op) {
+
+                    this.apply = function (source, dest, idx) {
+                        dest[idx] = op(source[idx]);
+                    };
+
+                    this.toString = function () {
+                        return name;
+                    };
+
+                },
+
                 Tool: function (name) {
 
                     this.init = function () {

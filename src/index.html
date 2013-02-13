@@ -32,6 +32,13 @@
         </fieldset>
 
         <fieldset>
+            <label>Operation:
+                <select id="operation" name="operation">
+                </select>
+            </label>
+        </fieldset>
+
+        <fieldset>
             <label>Tilemode:
                 <input id="tilemode" name="tilemode" type="checkbox" />
             </label>
@@ -39,7 +46,7 @@
 
         <fieldset>
             <label>History
-                <select id="history" name="history" size="10" multiple="multiple">
+                <select id="history" name="history" size="7" multiple="multiple">
 
                 </select>
             </label>
@@ -59,8 +66,9 @@
     <script src="js/tile.js" type="text/javascript"></script>
     <script src="js/cursor.js" type="text/javascript"></script>
     <script src="js/history.js" type="text/javascript"></script>
-    <script src="js/tools.js" type="text/javascript"></script>
     <script src="js/palette.js" type="text/javascript"></script>
+    <script src="js/operations.js" type="text/javascript"></script>
+    <script src="js/tools.js" type="text/javascript"></script>
     <script src="js/tools/action.js" type="text/javascript"></script>
     <script src="js/tools/basic.js" type="text/javascript"></script>
     <script src="js/widgets/zoompicker.js" type="text/javascript"></script>
@@ -69,6 +77,7 @@
     <script src="js/widgets/viewport.js" type="text/javascript"></script>
     <script src="js/widgets/toolbox.js" type="text/javascript"></script>
     <script src="js/widgets/modeswitcher.js" type="text/javascript"></script>
+    <script src="js/widgets/operationpicker.js" type="text/javascript"></script>
 
     <script type="text/javascript">
 
@@ -79,6 +88,7 @@
             toolbox = Warry.createWidget("toolbox", "toolbox"),
             history = Warry.createWidget("historybox", "history"),
             modeswicher = Warry.createWidget("modeswitcher", "tilemode"),
+            oppicker = Warry.createWidget("operationpicker", "operation"),
             loadData = function () {
                 tile.loadFromUrl("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAFZJREFUOI3tkkEKwDAIBEfpx/xYDn4sT7OHUGx6iuk1C6KDIiysYB50wEgVWOkALRdF1unrWwWOUR45r7NgHjveZwsb3h/WP94BrtHa52qd5eTg5AC4AcZYajOyI2czAAAAAElFTkSuQmCC");
             };

@@ -20,14 +20,12 @@
 
         var pen = this,
             compAct,
-            color = {r: 0, g: 0, b: 0, a: 0},
             start = {x: 0, y: 0},
             current = {x: 0, y: 0};
 
         pen.reset = function () {
 
             compAct = action.createComposite("Pen");
-            color = palette.getSelectedColor();
             start.x = current.x;
             start.y = current.y;
             pen.setPreviewPainter(compAct.applyAction);
@@ -46,7 +44,6 @@
                     line = action.createLine();
                     line.setStart(start.x, start.y);
                     line.setCurrent(current.x, current.y);
-                    line.copyColor(color);
                     compAct.add(line);
 
                     start.x = current.x;

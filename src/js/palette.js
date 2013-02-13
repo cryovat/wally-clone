@@ -97,9 +97,85 @@
                     }
 
                     func(palette.entries[palette.currentIndex]);
+                },
+
+                addHsl: function (color) {
+
+                    var r = color.r / 255,
+                        b = color.b / 255,
+                        g = color.g / 255,
+                        min = Math.min(r, Math.min(g, b)),
+                        max = Math.max(r, Math.max(g, b)),
+                        lum = (max + min) / 2,
+                        sat = 0,
+                        hue = 0;
+
+                    if (max !== min) {
+                        if (lum < 0.5) {
+                            sat = (max - min) / (max + min);
+                        } else {
+                            sat = (max - min) / (2.0 - max - min);
+                        }
+
+                        if (max === r) {
+                            hue = (g - b) / (max - min);
+                        } else if (max === g) {
+                            hue = 2.0 + (b - r) / (max - min);
+                        } else {
+                            hue = 4.0 + (r - g) / (max - min);
+                        }
+
+                        hue = hue * 60;
+
+                        if (hue < 0) {
+                            hue += 360;
+                        }
+                    }
+
+                    color.hue = hue;
+                    color.sat = sat;
+                    color.lum = lum;
+                },
+
+                findDistance: function (c1, c2) {
+
+                    return Math.sqrt(Math.pow(c1.hue - c2.hue, 2) + Math.pow(c1.sat - c2.sat, 2) + Math.pow(c1.lum - c2.lum, 2));
+
+                },
+
+                findClose: function (color, greater) {
+
+                    var possible = _.first(_.sortBy(
+                            _.filter(palette.entries, function (other) {
+                                return (greater ? color.lum < other.lum : color.lum > other.lum);
+                            }),
+                            function (other) {
+                                return palette.findDistance(color, other);
+                            }
+                        ));
+
+                    return possible || color;
+
+                },
+
+                closestFromRgb: function (r, g, b, greater) {
+
+                    console.log([r, g, b, greater]);
+
+
+                    var color = { r: r, g: g, b: b};
+                    palette.addHsl(color);
+
+                    console.log(palette.findClose(color, greater));
+
+                    return _.clone(palette.findClose(color, greater));
                 }
 
             };
+
+        _.each(palette.entries, function (c) {
+            palette.addHsl(c);
+        });
 
         that.getColorCount = palette.getColorCount;
         that.getColor = palette.getColor;
@@ -109,6 +185,7 @@
         that.setSelectedIndex = palette.setSelectedIndex;
         that.getSelectedColor = palette.getSelectedColor;
         that.withSelectedColor = palette.withSelectedColor;
+        that.closestFromRgb = palette.closestFromRgb;
 
     });
 

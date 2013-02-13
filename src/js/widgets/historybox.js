@@ -19,7 +19,7 @@
             option.text = e.action.toString();
 
             select.add(option);
-            select.selectedIndex = select.length;
+            select.selectedIndex = select.length - 1;
 
         });
 

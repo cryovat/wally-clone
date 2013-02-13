@@ -5,8 +5,8 @@
         throw new Error("Action module loaded before main Warry module");
     }
 
-    var hash = 0;
-    window.foo = [];
+    var hash = 0,
+        ops = main.getService("operations");
 
     main.createService("action", function () {
 
@@ -25,6 +25,10 @@
             },
             plot = function (data, x, width, y, color) {
                 ploti(data, y * width + x, color);
+            },
+
+            draw = function (source, dest, x, y, op) {
+                op(source.data, dest.data, (y % dest.height) * dest.width + (x % dest.width));
             };
 
         BaseAction = function () {
@@ -35,7 +39,7 @@
 
         };
 
-        DragAction = function () {
+        DragAction = function (op) {
 
             this.initDefaults = function () {
                 this._color = { r: 255, g: 255, b: 255, a: 255  };
@@ -93,7 +97,7 @@
             };
         };
 
-        LineAction = function () {
+        LineAction = function (op) {
 
             this.initDefaults();
 
@@ -117,7 +121,8 @@
                 err = dx - dy;
 
                 while (true) {
-                    plot(dest.data, x0 % dest.width, dest.width, y0 % dest.height, that._color);
+
+                    draw(source, dest, x0, y0, op);
 
                     if (x0 === x1 && y0 === y1) {
                         break;
@@ -145,7 +150,7 @@
 
         };
 
-        RectAction = function () {
+        RectAction = function (op) {
 
             this.initDefaults();
 
@@ -169,7 +174,9 @@
                     y = y0;
 
                     do {
-                        plot(dest.data, x % dest.width, dest.width, y % dest.height, that._color);
+
+                        draw(source, dest, x, y, op);
+
                         y += sy;
 
                     } while (y - sy !== y1);
@@ -185,7 +192,7 @@
 
         };
 
-        CircleAction = function () {
+        CircleAction = function (op) {
 
             this.initDefaults();
 
@@ -205,23 +212,23 @@
                     xChange = 1 - (radius << 1),
                     yChange = 0,
                     err = 0,
-                    draw = function (px, py) {
-                        plot(dest.data, px % dest.width, dest.width, py % dest.width, that._color);
+                    pixel = function (px, py) {
+                        draw(source, dest, px, py, op);
                     };
 
                 while (x >= y) {
 
-                    draw(x + x0, y + y0);
-                    draw(y + x0, x + y0);
+                    pixel(x + x0, y + y0);
+                    pixel(y + x0, x + y0);
 
-                    draw(-x + x0, y + y0);
-                    draw(-y + x0, x + y0);
+                    pixel(-x + x0, y + y0);
+                    pixel(-y + x0, x + y0);
 
-                    draw(-x + x0, -y + y0);
-                    draw(-y + x0, -x + y0);
+                    pixel(-x + x0, -y + y0);
+                    pixel(-y + x0, -x + y0);
 
-                    draw(x + x0, -y + y0);
-                    draw(y + x0, -x + y0);
+                    pixel(x + x0, -y + y0);
+                    pixel(y + x0, -x + y0);
 
                     y += 1;
                     err += yChange;
@@ -272,15 +279,15 @@
         CompositeAction.prototype = new BaseAction();
 
         this.createLine = function () {
-            return new LineAction();
+            return new LineAction(ops.getActive());
         };
 
         this.createRect = function () {
-            return new RectAction();
+            return new RectAction(ops.getActive());
         };
 
         this.createCircle = function () {
-            return new CircleAction();
+            return new CircleAction(ops.getActive());
         };
 
         this.createComposite = function (name) {
