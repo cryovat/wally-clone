@@ -11,8 +11,6 @@
         widgetTypes: {},
         Model: function () {
 
-            var events = {};
-
             this.addEventListener = function (type, func) {
 
                 if (!_.isString(type)) {
@@ -23,7 +21,11 @@
                     throw new TypeError("Event handler must be function, got " + typeof (func));
                 }
 
-                events[type] = _.union((events[type] || []), [func]);
+                if (!this._events) {
+                    this._events = [];
+                }
+
+                this._events[type] = _.union((this._events[type] || []), [func]);
             };
 
             this.removeEventListener = function (type, func) {
@@ -36,8 +38,12 @@
                     throw new TypeError("Event handler must be function, got " + typeof (func));
                 }
 
-                if (events[type]) {
-                    events[type] = _.without(events[type], func);
+                if (!this._events) {
+                    this._events = [];
+                }
+
+                if (this._events[type]) {
+                    this._events[type] = _.without(this._events[type], func);
                 }
 
             };
@@ -48,12 +54,14 @@
                     throw new TypeError("Event type must be string, got " + typeof (type));
                 }
 
-                var handlers = events[type];
+                if (this._events) {
+                    var handlers = this._events[type];
 
-                if (handlers) {
-                    _.each(handlers, function (handler) {
-                        handler(event);
-                    });
+                    if (handlers) {
+                        _.each(handlers, function (handler) {
+                            handler(event);
+                        });
+                    }
                 }
 
             };
