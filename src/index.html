@@ -49,6 +49,7 @@
                 <select id="history" name="history" size="7" multiple="multiple">
 
                 </select>
+                <button id="undo" name="undo" type="button" disabled>Undo</button>
             </label>
         </fieldset>
 
@@ -78,6 +79,7 @@
     <script src="js/widgets/toolbox.js" type="text/javascript"></script>
     <script src="js/widgets/modeswitcher.js" type="text/javascript"></script>
     <script src="js/widgets/operationpicker.js" type="text/javascript"></script>
+    <script src="js/widgets/undobutton.js" type="text/javascript"></script>
 
     <script type="text/javascript">
 
@@ -89,6 +91,7 @@
             history = Warry.createWidget("historybox", "history"),
             modeswicher = Warry.createWidget("modeswitcher", "tilemode"),
             oppicker = Warry.createWidget("operationpicker", "operation"),
+            undobutton = Warry.createWidget("undobutton", "undo"),
             loadData = function () {
                 tile.loadFromUrl("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAFZJREFUOI3tkkEKwDAIBEfpx/xYDn4sT7OHUGx6iuk1C6KDIiysYB50wEgVWOkALRdF1unrWwWOUR45r7NgHjveZwsb3h/WP94BrtHa52qd5eTg5AC4AcZYajOyI2czAAAAAElFTkSuQmCC");
             };

@@ -21,6 +21,10 @@
 
                 },
 
+                isEmpty: function () {
+                    return (history.actions.length === 0);
+                },
+
                 clear: function (action) {
 
                     history.actions.length = 0;
@@ -29,12 +33,33 @@
 
                 },
 
+                undo: function () {
+
+                    if (history.actions.length > 0) {
+                        history.actions.length -= 1;
+                    }
+
+                    that.fireEvent("historyundo", {});
+                },
+
                 replayFromStart: function (source, dest) {
 
+                    var a = source,
+                        b = dest;
+
                     _.each(history.actions, function (action) {
-                        action.applyAction(source, dest);
+                        var temp;
+
+                        action.applyAction(a, b);
+
+                        temp = a;
+                        a = b;
+                        b = a;
                     });
 
+                    if (b === source) {
+                        dest.set(b, 0);
+                    }
                 }
 
             };
@@ -46,6 +71,8 @@
         });
 
         that.addAction = history.addAction;
+        that.isEmpty = history.isEmpty;
+        that.undo = history.undo;
         that.replayFromStart = history.replayFromStart;
 
     });

@@ -148,6 +148,17 @@
             resetBuffers(tile.getTileInfo());
         });
 
+        history.addEventListener("historyundo", function (e) {
+
+            resetBuffers(tile.getTileInfo());
+
+            var old = ctx.createImageData(bufImg.width,  bufImg.height);
+            old.data.set(bufImg.data, 0);
+
+            history.replayFromStart(old, bufImg);
+
+        });
+
         cursor.addEventListener("cursormove", function (e) {
             invalidate();
         });

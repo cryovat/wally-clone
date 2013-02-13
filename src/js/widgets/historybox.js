@@ -23,7 +23,20 @@
 
         });
 
+        history.addEventListener("historyundo", function (e) {
 
+            if (select.options.length > 0) {
+                select.options.length -= 1;
+                select.selectedIndex = select.length - 1;
+            }
+
+        });
+
+        history.addEventListener("historyreset", function (e) {
+
+            select.options.length = 0;
+
+        });
 
     });
 

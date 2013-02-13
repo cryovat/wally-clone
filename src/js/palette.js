@@ -160,13 +160,8 @@
 
                 closestFromRgb: function (r, g, b, greater) {
 
-                    console.log([r, g, b, greater]);
-
-
                     var color = { r: r, g: g, b: b};
                     palette.addHsl(color);
-
-                    console.log(palette.findClose(color, greater));
 
                     return _.clone(palette.findClose(color, greater));
                 }
