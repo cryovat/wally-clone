@@ -5,6 +5,7 @@
         palette = main.getService("palette"),
         tile = main.getService("tile"),
         action = main.getService("action"),
+        history = main.getService("history"),
         ploti = function (data, i, color) {
             data[i * 4] = color.r;
             data[i * 4 + 1] = color.g;
@@ -25,7 +26,7 @@
 
         pen.reset = function () {
 
-            compAct = action.createComposite();
+            compAct = action.createComposite("Pen");
             color = palette.getSelectedColor();
             start.x = current.x;
             start.y = current.y;
@@ -58,7 +59,7 @@
         };
 
         pen.commit = function () {
-
+            history.addAction(compAct);
         };
 
     });

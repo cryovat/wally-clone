@@ -10,6 +10,7 @@
         var that = this,
             tile = main.getService("tile"),
             cursor = main.getService("cursor"),
+            history = main.getService("history"),
             tools = main.getService("tools"),
             pixelSize = tile.getZoom(),
             repeat = tile.isRepeat(),
@@ -130,6 +131,21 @@
             e.painter(bufImg, bufTool);
 
             invalidate();
+        });
+
+        history.addEventListener("actionadded", function (e) {
+
+            var old = ctx.createImageData(bufImg.width,  bufImg.height);
+            old.data.set(bufImg.data, 0);
+
+            e.action.applyAction(old, bufImg);
+
+            invalidate();
+
+        });
+
+        history.addEventListener("historyreset", function (e) {
+            resetBuffers(tile.getTileInfo());
         });
 
         cursor.addEventListener("cursormove", function (e) {

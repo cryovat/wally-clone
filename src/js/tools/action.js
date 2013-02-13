@@ -140,7 +140,7 @@
             };
 
             this.toString = function () {
-                return "Line from " + this._start.x + "," + this._start.y + " to " + this._current.x + "," + this._current.y;
+                return "Line (" + this._start.x + "," + this._start.y + " to " + this._current.x + "," + this._current.y + ")";
             };
 
         };
@@ -177,6 +177,10 @@
                     x += sx;
                 } while (x - sx !== x1);
 
+            };
+
+            this.toString = function () {
+                return "Rectangle (l:" + Math.min(this._current.x, this._start.x) + ", t:" + Math.min(this._start.y, this._current.y) + ", r: " + Math.max(this._start.x, this._current.x) + ", b:" + Math.max(this._start.y, this._current.y) + ")";
             };
 
         };
@@ -233,9 +237,13 @@
 
             };
 
+            this.toString = function () {
+                return "Circle (x: " + this._start.x + ", y: " + this._start.y + ", r: " + this.calcRadius() + ")";
+            };
+
         };
 
-        CompositeAction = function () {
+        CompositeAction = function (name) {
 
             var that = this;
 
@@ -250,6 +258,10 @@
                 _.each(that.actions, function (a) {
                     a.applyAction(source, dest);
                 });
+            };
+
+            this.toString = function () {
+                return name || "Composite action";
             };
 
         };
@@ -271,8 +283,8 @@
             return new CircleAction();
         };
 
-        this.createComposite = function () {
-            return new CompositeAction();
+        this.createComposite = function (name) {
+            return new CompositeAction(name);
         };
 
     });

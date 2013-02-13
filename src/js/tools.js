@@ -9,6 +9,7 @@
 
         var that = this,
             cursor = main.getService("cursor"),
+            history = main.getService("history"),
             toolbox = {
 
                 Tool: function (name) {
@@ -206,7 +207,7 @@
                         };
 
                         this.commit = function () {
-
+                            history.addAction(dragAct);
                         };
 
                     });

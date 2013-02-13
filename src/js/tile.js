@@ -72,8 +72,14 @@
 
                 loadFromUrl: function (url) {
 
+                    console.log("hi");
+
                     if (!_.isString(url)) {
                         throw new TypeError("Expected tile url to be string but got " + typeof (url));
+                    }
+
+                    if (tile.baseImage.src === url) {
+                        tile.baseImage.src = "";
                     }
 
                     tile.baseImage.src = url;
