@@ -1,10 +1,17 @@
-(function (main) {
+(function (global) {
     "use strict";
 
-    if (!_.isObject(main)) {
-        throw new Error("Cursor module loaded before main Warry module");
+    if (typeof (global.window._) !== "function") {
+        throw new Error("Underscore.js not found");
     }
 
+    if (!global.window._.isObject(global.window.Warry)) {
+        throw new Error("Zoompicker widget loaded before main Warry module");
+    }
+
+    var w = global.window,
+        _ = w._,
+        main = w.Warry;
 
     main.addWidgetType("zoompicker", function (element) {
 
@@ -42,4 +49,4 @@
 
     });
 
-}(this.Warry));
+}(this));

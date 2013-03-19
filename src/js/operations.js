@@ -1,9 +1,17 @@
-(function (main) {
+(function (global) {
     "use strict";
 
-    if (!_.isObject(main)) {
+    if (typeof (global.window._) !== "function") {
+        throw new Error("Underscore.js not found");
+    }
+
+    if (!global.window._.isObject(global.window.Warry)) {
         throw new Error("Operations service loaded before main Warry module");
     }
+
+    var w = global.window,
+        _ = w._,
+        main = w.Warry;
 
     main.createService("operations", function () {
 
@@ -85,4 +93,4 @@
         that.getActive = ops.getActive;
 
     });
-}(Warry));
+}(this));

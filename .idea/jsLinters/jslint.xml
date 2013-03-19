@@ -6,7 +6,6 @@
     <option indent="4" />
     <option maxerr="50" />
     <option nomen="true" />
-    <option predef="Warry, _" />
   </component>
 </project>
 

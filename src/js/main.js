@@ -1,11 +1,12 @@
 (function (global) {
     "use strict";
 
-    if (typeof (_) !== "function") {
+    if (typeof (global.window._) !== "function") {
         throw new Error("Underscore.js not found");
     }
 
-    var core = {
+    var _ = global.window._,
+        core = {
 
         services: {},
         widgetTypes: {},

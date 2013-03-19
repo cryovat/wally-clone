@@ -1,17 +1,24 @@
-(function (main) {
+(function (global) {
     "use strict";
 
-    if (!_.isObject(main)) {
-        throw new Error("Palette view module loaded before main Warry module");
+    if (typeof (global.window._) !== "function") {
+        throw new Error("Underscore.js not found");
     }
 
-    var internal = {
-
-        invert: function (component) {
-            return (component + 128) % 256;
-        }
-
+    if (!global.window._.isObject(global.window.Warry)) {
+        throw new Error("Color Picker widget loaded before main Warry module");
     }
+
+    var w = global.window,
+        _ = w._,
+        main = w.Warry,
+        internal = {
+
+            invert: function (component) {
+                return (component + 128) % 256;
+            }
+
+        };
 
     main.addWidgetType("colorpicker", function (canvas) {
 
@@ -95,4 +102,4 @@
         invalidate();
     });
 
-}(this.Warry));
+}(this));

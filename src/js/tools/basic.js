@@ -1,7 +1,18 @@
-(function (main) {
+(function (global) {
     "use strict";
 
-    var tools = main.getService("tools"),
+    if (typeof (global.window._) !== "function") {
+        throw new Error("Underscore.js not found");
+    }
+
+    if (!global.window._.isObject(global.window.Warry)) {
+        throw new Error("Basic editing tools loaded before main Warry module");
+    }
+
+    var w = global.window,
+        _ = w._,
+        main = w.Warry,
+        tools = main.getService("tools"),
         palette = main.getService("palette"),
         tile = main.getService("tile"),
         action = main.getService("action"),
@@ -65,4 +76,4 @@
     tools.createDragActionTool("rectangle", action.createRect, palette.getSelectedColor);
     tools.createDragActionTool("circle", action.createCircle, palette.getSelectedColor);
 
-}(Warry));
+}(this));

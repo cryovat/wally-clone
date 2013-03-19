@@ -1,9 +1,17 @@
-(function (main) {
+(function (global) {
     "use strict";
 
-    if (!_.isObject(main)) {
-        throw new Error("Undo button widget loaded before main Warry module");
+    if (typeof (global.window._) !== "function") {
+        throw new Error("Underscore.js not found");
     }
+
+    if (!global.window._.isObject(global.window.Warry)) {
+        throw new Error("Undobutton widget loaded before main Warry module");
+    }
+
+    var w = global.window,
+        _ = w._,
+        main = w.Warry;
 
     main.addWidgetType("undobutton", function (button) {
 
@@ -27,10 +35,4 @@
 
     });
 
-}(this.Warry));/**
- * Created with IntelliJ IDEA.
- * User: jarlerik
- * Date: 2/13/13
- * Time: 11:04 PM
- * To change this template use File | Settings | File Templates.
- */
+}(this));
