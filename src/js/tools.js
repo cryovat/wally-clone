@@ -188,11 +188,15 @@
                 },
 
                 createTool: function (name, constructor) {
-                    toolbox.createToolInternal(name, constructor, function () { return new toolbox.Tool(); });
+                    toolbox.createToolInternal(name, constructor, function () {
+                        return new toolbox.Tool();
+                    });
                 },
 
                 createSimpleTool: function (name, constructor) {
-                    toolbox.createToolInternal(name, constructor, function () { return new toolbox.SimpleTool(); });
+                    toolbox.createToolInternal(name, constructor, function () {
+                        return new toolbox.SimpleTool();
+                    });
                 },
 
                 createDragActionTool: function (name, factory, colorSource) {

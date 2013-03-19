@@ -20,23 +20,23 @@
 
                 // From http://androidarts.com/palette/16pal.htm
                 entries: [
-                    { r: 0,   g: 0,   b: 0,   a: 255 },
+                    { r: 0, g: 0, b: 0, a: 255 },
                     { r: 157, g: 157, b: 157, a: 255 },
                     { r: 255, g: 255, b: 255, a: 255 },
-                    { r: 190, g:  38, b:  51, a: 255 },
+                    { r: 190, g: 38, b: 51, a: 255 },
                     { r: 224, g: 111, b: 139, a: 255 },
-                    { r:  73, g:  60, b:  43, a: 255 },
-                    { r: 164, g: 100, b:  34, a: 255 },
-                    { r: 235, g: 137, b:  49, a: 255 },
+                    { r: 73, g: 60, b: 43, a: 255 },
+                    { r: 164, g: 100, b: 34, a: 255 },
+                    { r: 235, g: 137, b: 49, a: 255 },
                     { r: 247, g: 226, b: 107, a: 255 },
-                    { r:  47, g:  72, b:  78, a: 255 },
-                    { r:  68, g: 137, b:  26, a: 255 },
-                    { r: 163, g: 206, b:  39, a: 255 },
-                    { r:  27, g:  38, b:  50, a: 255 },
-                    { r:   0, g:  87, b: 132, a: 255 },
-                    { r:  49, g: 162, b: 242, a: 255 },
+                    { r: 47, g: 72, b: 78, a: 255 },
+                    { r: 68, g: 137, b: 26, a: 255 },
+                    { r: 163, g: 206, b: 39, a: 255 },
+                    { r: 27, g: 38, b: 50, a: 255 },
+                    { r: 0, g: 87, b: 132, a: 255 },
+                    { r: 49, g: 162, b: 242, a: 255 },
                     { r: 178, g: 220, b: 239, a: 255 },
-                    { r: 255, g:   0, b: 255, a: 255 }
+                    { r: 255, g: 0, b: 255, a: 255 }
                 ],
                 currentIndex: 0,
 
@@ -154,13 +154,13 @@
                 findClose: function (color, greater) {
 
                     var possible = _.first(_.sortBy(
-                            _.filter(palette.entries, function (other) {
-                                return (greater ? color.lum < other.lum : color.lum > other.lum);
-                            }),
-                            function (other) {
-                                return palette.findDistance(color, other);
-                            }
-                        ));
+                        _.filter(palette.entries, function (other) {
+                            return (greater ? color.lum < other.lum : color.lum > other.lum);
+                        }),
+                        function (other) {
+                            return palette.findDistance(color, other);
+                        }
+                    ));
 
                     return possible || color;
 

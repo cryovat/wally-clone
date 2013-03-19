@@ -77,13 +77,13 @@
                         ctx.lineWidth = 1;
                         ctx.beginPath();
                         ctx.moveTo(0, tileHeight * pixelSize);
-                        ctx.lineTo(tileWidth * 3 * pixelSize,  tileHeight * pixelSize);
+                        ctx.lineTo(tileWidth * 3 * pixelSize, tileHeight * pixelSize);
                         ctx.moveTo(0, tileHeight * 2 * pixelSize);
-                        ctx.lineTo(tileWidth * 3 * pixelSize,  tileHeight * 2 * pixelSize);
+                        ctx.lineTo(tileWidth * 3 * pixelSize, tileHeight * 2 * pixelSize);
                         ctx.moveTo(tileWidth * pixelSize, 0);
-                        ctx.lineTo(tileWidth * pixelSize,  tileHeight * 3 * pixelSize);
+                        ctx.lineTo(tileWidth * pixelSize, tileHeight * 3 * pixelSize);
                         ctx.moveTo(tileHeight * 2 * pixelSize, 0);
-                        ctx.lineTo(tileWidth * 2 * pixelSize,  tileHeight * 3 * pixelSize);
+                        ctx.lineTo(tileWidth * 2 * pixelSize, tileHeight * 3 * pixelSize);
                         ctx.stroke();
                     }
 
@@ -143,7 +143,7 @@
 
         history.addEventListener("actionadded", function (e) {
 
-            var old = ctx.createImageData(bufImg.width,  bufImg.height);
+            var old = ctx.createImageData(bufImg.width, bufImg.height);
             old.data.set(bufImg.data, 0);
 
             e.action.applyAction(old, bufImg);
@@ -160,7 +160,7 @@
 
             resetBuffers(tile.getTileInfo());
 
-            var old = ctx.createImageData(bufImg.width,  bufImg.height);
+            var old = ctx.createImageData(bufImg.width, bufImg.height);
             old.data.set(bufImg.data, 0);
 
             history.replayFromStart(old, bufImg);
